@@ -4,6 +4,19 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
+## [1.8.0] - Faster Streams & Smarter Caching
+
+### Added
+- **Way faster on repeat episode requests** — If you already watched an episode recently, the addon now remembers and returns streams instantly without searching Nyaa again. This applies across sessions and even across different users on the same server.
+- **Results cached per episode for 3 days** — Streams are now saved specifically for each episode of each show. Previously the cache could sometimes serve the wrong results for a different show's episode at the same season/episode number — that's now fixed.
+- **Searches stop as soon as results are found** — When the first successful search comes back with streams, the addon immediately skips all remaining searches, cutting out unnecessary requests.
+
+### Improved
+- Removed an old redundant database collection (`searches`) that was no longer needed.
+- Extended the cache lifetime from 4 hours to 3 days, so popular episodes stay cached much longer.
+
+---
+
 ## [1.7.1] - Patch: Stream Quality & Completeness Fixes
 
 ### Improved
