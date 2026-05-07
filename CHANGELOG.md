@@ -4,6 +4,20 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
+## [1.8.2] - Fixed Wrong Episode & Improved Cache Reuse
+
+### Fixed
+- **Batch torrents now use cached download links correctly** — When streaming multi-episode torrents (batches), the addon was bypassing the download link cache even when already cached, forcing unnecessary re-downloads from RealDebrid. The cache is now reused properly for each episode's file within a batch torrent, avoiding redundant API calls and download delays.
+- **Accurate RealDebrid availability labels on batch episodes** — The [RD+] indicator now correctly shows whether each individual episode file is cached, rather than marking all batch episodes cached if any file was. Filename-based matching ensures the right episode file is identified even when multiple torrents share the same hash.
+- **Batch stream URLs now mapped correctly per episode** — Fixed an edge case where requesting episode 2 from a batch torrent could return episode 1's download link, causing playback of the wrong episode. The cache key now includes the specific file index, making it unique per episode within a batch.
+
+### Internal
+- **Download link cache now embedded in torrent entries** — Resolved URLs are now stored directly on each torrent's data array entry (with fileIndex as the key), replacing the old root-level map. This prevents cache contamination and ensures each episode gets its own link, especially important for batch torrents spanning multiple episodes.
+- **Filename-based torrent disambiguation** — When multiple torrents share the same hash in RealDebrid, the addon now uses filename matching to select the correct one, falling back to the first match if filenames don't differ.
+- **Removed batch-specific cache bypass** — No longer unconditionally skips the download link cache for batch file streams; the cache is now safe to use for all cached torrents since URLs are keyed by both hash and file index.
+
+---
+
 ## [1.8.1] - Cache Storage Optimization
 
 ### Improved
