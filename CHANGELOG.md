@@ -4,6 +4,18 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
+## [1.8.4] - Extended Cache Retention to 30 Days
+
+### Improved
+- **Episode cache now retained for 30 days instead of 3 days** — Popular episodes stay cached much longer, reducing redundant searches to Nyaa and improving response times for shows you watch regularly.
+- **Existing cached data automatically updated** — Migration 009 refreshes all cached episodes on first run, extending their expiration to 30 days from migration time.
+
+### Internal
+- **Extended default `EPISODE_CACHE_TTL`** — Increased from 3 days (259,200 seconds) to 30 days (2,592,000 seconds), with environment variable override support via `EPISODE_CACHE_TTL_SECONDS`.
+- **TTL index validation** — Migration ensures the MongoDB TTL index is correctly configured with `expireAfterSeconds: 0` for proper expiration behavior.
+
+---
+
 ## [1.8.3] - Smarter Search Pipeline & Stability Fixes
 
 ### Improved
