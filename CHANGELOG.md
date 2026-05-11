@@ -4,6 +4,16 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
+## [1.8.5] - Stremio v4 P2P Compatibility Fix
+
+### Fixed
+- **P2P streams now work correctly on Stremio v4, v5, and web** — P2P stream objects were setting `url` to a magnet URI, which Stremio v4 tries to HTTP-fetch and fails on. The `url` field is now only used for debrid/HTTP streams. P2P streams use `infoHash` + `sources` exclusively.
+- **Batch P2P streams now navigate to the correct episode file** — `fileIdx` was being set to the episode's position in the full torrent file list (including subtitles, NFOs, etc.), which could be a large number unrelated to playback order. It now uses the position among video-only files, which is what Stremio's P2P client actually indexes over.
+- **Single-episode P2P streams use `fileIdx: 0`** — Single-episode torrents always have one video file; hardcoding index 0 avoids any incorrect index derived from the title.
+- **Debrid streams no longer include `infoHash`, `sources`, or `fileIdx`** — These fields are P2P-only. Debrid streams resolve entirely via `url` and do not need them.
+
+---
+
 ## [1.8.4] - Extended Cache Retention to 30 Days
 
 ### Improved
