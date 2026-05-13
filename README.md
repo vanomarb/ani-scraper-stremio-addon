@@ -7,14 +7,14 @@
 
 <h1 align="center">Unofficial Nyaa Scraper Addon</h1>
 
-## 🔗 Install / Instance
+## 🔗 Install / Version
 Install the addon directly in Stremio using the instance below:
 
-### Public Instance
+### Public Version
 **Addon URL:**
 [https://nyaa-scraper-stremio-addon.nmtl.app/configure](https://nyaa-scraper-stremio-addon.nmtl.app/configure)
 
-### Nightly Instance
+### Nightly Version
 **Addon URL:**
 [https://nyaa-scraper-nightly.nmtl.app/configure](https://nyaa-scraper-nightly.nmtl.app/configure)
 
