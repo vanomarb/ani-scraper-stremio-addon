@@ -4,7 +4,15 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.8.6] - Faster Searches and More Reliable Stream Matching
+## [1.8.7] - 2026-05-13 — Smarter RealDebrid Cache Handling
+
+### Fixed
+- **Cached CDN links now stay valid even after deleting a torrent from RealDebrid** — Previously, if you deleted a torrent from your RD library manually, the addon would ignore the still-valid cached CDN URL and add the magnet all over again. The liveness check now runs first: if the cached URL is reachable, it is returned directly without touching the RD library at all.
+- **Single-episode torrents no longer retrigger a new RealDebrid magnet on every click** — For individual episode releases (where `fileIndex` is the absolute episode number, not a positional file ID), the addon was checking for an RD file with `id = fileIndex + 1` (e.g. id=140 for episode 140), which never exists — single-file torrents always have `id = 1`. This caused the addon to conclude the file was not selected and re-add the magnet on every stream click. It now correctly detects single-file torrents and only requires that any file is selected.
+
+---
+
+## [1.8.6] - 2026-05-11 — Faster Searches and More Reliable Stream Matching
 
 ### Improved
 - **Up to 6× faster stream search** — Uncached episodes now return in ~6 seconds instead of up to 40 seconds. The addon reads metadata from cache before firing any Nyaa queries, so the correct episode number and title are known upfront and only 1–2 targeted searches are needed.
@@ -20,7 +28,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.8.5] - Stremio v4 P2P Compatibility Fix
+## [1.8.5] - 2026-05-11 — Stremio v4 P2P Compatibility Fix
 
 ### Fixed
 - **P2P streams now work correctly on Stremio v4, v5, and web** — P2P stream objects were setting `url` to a magnet URI, which Stremio v4 tries to HTTP-fetch and fails on. The `url` field is now only used for debrid/HTTP streams. P2P streams use `infoHash` + `sources` exclusively.
@@ -30,7 +38,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.8.4] - Extended Cache Retention to 30 Days
+## [1.8.4] - 2026-05-11 — Extended Cache Retention to 30 Days
 
 ### Improved
 - **Episode cache now retained for 30 days instead of 3 days** — Popular episodes stay cached much longer, reducing redundant searches to Nyaa and improving response times for shows you watch regularly.
@@ -42,7 +50,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.8.3] - Smarter Search Pipeline & Stability Fixes
+## [1.8.3] - 2026-05-09 — Smarter Search Pipeline & Stability Fixes
 
 ### Improved
 - **Anime titles pattern are too messy** — Shows sourced from TVDB (rather than Kitsu) were routing all their title variants through the wrong search path, causing them to fire every alternate title query even after already finding results. Search now takes the correct path for each type of show, stopping as soon as it has what it needs.
@@ -57,7 +65,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.8.2] - Fixed Wrong Episode, Improved Cache Reuse & Stale Link Detection
+## [1.8.2] - 2026-05-07 — Fixed Wrong Episode, Improved Cache Reuse & Stale Link Detection
 
 ### Fixed
 - **Batch torrents now use cached download links correctly** — When streaming multi-episode torrents (batches), the addon was bypassing the download link cache even when already cached, forcing unnecessary re-downloads from RealDebrid. The cache is now reused properly for each episode's file within a batch torrent, avoiding redundant API calls and download delays.
@@ -72,7 +80,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.8.1] - Cache Storage Optimization
+## [1.8.1] - 2026-05-06 — Cache Storage Optimization
 
 ### Improved
 - **Dramatically smaller cache database footprint** — Episode cache now stores only essential fields (`infoHash`, `title`, `source`) instead of all metadata. This reduces per-torrent cache size by ~80% (from several hundred bytes down to ~100-150 bytes per entry). For popular episodes with hundreds of cached torrents, this means significant MongoDB storage savings across your entire cache.
@@ -85,7 +93,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.8.0] - Faster Streams & Smarter Caching
+## [1.8.0] - 2026-05-05 — Faster Streams & Smarter Caching
 
 ### Added
 - **Way faster on repeat episode requests** — If you already watched an episode recently, the addon now remembers and returns streams instantly without searching Nyaa again. This applies across sessions and even across different users on the same server.
@@ -98,7 +106,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.7.1] - Patch: Stream Quality & Completeness Fixes
+## [1.7.1] - 2026-05-01 — Patch: Stream Quality & Completeness Fixes
 
 ### Improved
 - **Streams now sorted by your resolution preference** — Results are returned in the order you configured (e.g. 4K first, then 1080p, then 720p), regardless of whether a torrent is cached or not.
@@ -108,7 +116,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.7.0] - Feature: Performance Tuning, UI Overhaul & Search Fixes
+## [1.7.0] - 2026-05-01 — Feature: Performance Tuning, UI Overhaul & Search Fixes
 
 ### Added
 - **Performance Tuning Controls in Optional Settings** — New configurable options to optimize stream search speed based on your preferences:
@@ -134,7 +142,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.6.2] - Patch: Debrid Service Bug Fixes
+## [1.6.2] - 2026-04-28 — Patch: Debrid Service Bug Fixes
 
 ### Fixed
 - **AllDebrid & TorBox: Wrong episode selected** — Multi-episode torrents now pick the correct episode instead of always grabbing the largest or wrong file.
@@ -146,7 +154,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.6.1] - Patch: TorBox & Source Tag Fixes
+## [1.6.1] - 2026-04-26 — Patch: TorBox & Source Tag Fixes
 
 ### Fixed
 - **TorBox Availability Check** — Fixed TorBox cached torrent detection using the wrong request format. Availability checks now work correctly, properly showing which torrents TorBox can deliver instantly.
@@ -154,7 +162,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.6.0] - Smarter Anime Search
+## [1.6.0] - 2026-04-26 — Smarter Anime Search
 
 ### Added
 - **Absolute Episode Matching** — When searching for a seasonal episode (e.g. Season 4 Episode 97), the addon now also searches by the absolute episode number (e.g. Episode 182) using cached series metadata. This finds fansub releases that use continuous episode numbering instead of season/episode notation.
@@ -166,7 +174,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.5.0] - Multi-Debrid Support
+## [1.5.0] - 2026-04-26 — Multi-Debrid Support
 
 ### Added
 - **TorBox & AllDebrid Support** — You can now use TorBox or AllDebrid as your debrid service in addition to Real-Debrid. Switch between services using the new dropdown on the configure page — no more manual URL editing.
@@ -177,7 +185,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.4.2] - Performance Optimization
+## [1.4.2] - 2026-04-26 — Performance Optimization
 
 ### Improved
 - **Faster Stream Loading (Cache Miss)** — Optimized parallel processing of torrent fetches, metadata lookups, and Real-Debrid availability checks. Stream lists now appear in 8-12 seconds instead of 30-40+ seconds when cache isn't available.
@@ -191,14 +199,14 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.4.1] - Patch: Resolution Filter Persistence Fix
+## [1.4.1] - 2026-04-26 — Patch: Resolution Filter Persistence Fix
 
 ### Fixed
 - **Resolution Filter Not Prefilled** — Resolution checkboxes now correctly restore their unchecked state when loading a saved configuration. Previously all checkboxes defaulted to checked regardless of saved preferences.
 
 ---
 
-## [1.4.0] - P2P Streaming & Resolution Filters
+## [1.4.0] - 2026-04-26 — P2P Streaming & Resolution Filters
 
 ### Added
 - **P2P Direct Magnet Links** — Optional P2P streaming mode lets you watch without Real-Debrid. Direct peer-to-peer connections provide instant playback without needing to wait for RD caching. Also works with trackers for faster peer discovery. Toggle in Optional Settings (only shows when no RD key is configured).
@@ -218,7 +226,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.3.2] - Internal Refactor
+## [1.3.2] - 2026-04-24 — Internal Refactor
 
 ### Changed
 - **Unified Logging System** — Implemented centralized logger with 3-level control (`LOG_LEVEL=1|2|3`), replacing scattered `console.*` calls with consistent `[DEBUG]`, `[INFO]`, `[WARN]`, `[ERROR]` prefixes
@@ -236,7 +244,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.3.1] - Patch Release
+## [1.3.1] - 2026-04-22 — Patch Release
 
 ### Added
 - **Smart Torrent Title Recognition** — The addon now uses intelligent matching to extract season, episode, and title information from torrent filenames. It recognizes Japanese, Chinese, and Korean anime titles with high accuracy, handles various naming conventions (different formatting, symbols, and abbreviations), and automatically corrects common parsing mistakes. This means it finds the right episodes even when torrent names are messy or use unusual formatting.
@@ -251,7 +259,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.3.0] - Patch Release
+## [1.3.0] - 2026-04-14 — Patch Release
 
 ### Fixed
 - **Real-Debrid Auto-Downloads** — Pack torrents (multiple episodes) no longer automatically download all files when browsing for streams. Only the episode you select will be downloaded, saving bandwidth and avoiding cluttered RD libraries.
@@ -263,7 +271,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.2.1]
+## [1.2.1] - 2026-04-12
 
 ### Fixed
 - **Batch Torrent Handling** — Multi-file torrents now return only individual episode streams, removing the redundant pack-level stream.
@@ -271,7 +279,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.2.0] - Feature Update
+## [1.2.0] - 2026-04-07 — Feature Update
 
 ### Added
 - **Language Filtering & Detection** — Automatic language detection using `franc` library to identify content language (Japanese, English, etc.)
@@ -292,7 +300,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.1.0]
+## [1.1.0] - 2026-04-05
 
 ### Added
 - **MongoDB Caching Layer** — Persistent request cache using MongoDB Atlas with TTL-based auto-cleanup:
@@ -317,7 +325,7 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.0.0]
+## [1.0.0] - 2026-04-04
 
 ### Added
 - **Core Torrent Streaming** — Nyaa.si and AnimeTosho torrent source integration with Stremio addon framework
