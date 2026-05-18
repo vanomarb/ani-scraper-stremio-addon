@@ -4,6 +4,26 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
+## [1.9.0] - 2026-05-18 — Flat-Catalog Donghua Matching & Test Suite
+
+### Improved
+- **Flat-catalog donghua (e.g. Apotheosis, Swallowed Star) now correctly returns streams for all seasons** — Catalogs that expose all episodes as Season 1 but whose fansub releases are internally split by season (S2, S3, …) were previously dropping matches due to a season mismatch. The provider now reads absolute-episode range hints embedded in batch titles (e.g. `(053-062)`) and accepts any torrent whose range covers the requested episode, regardless of the fansub's internal season numbering.
+- **Bare full-season packs (e.g. "Apotheosis S2") matched correctly via pre-seeded hints** — When a bare season pack appears in search results alongside sub-packs that carry explicit absolute-episode ranges, the addon now pre-seeds a hint map before classifying any result. This means the bare pack is matched even when it appears *before* the sub-packs in Nyaa's result order.
+- **Absolute range hints require 3+ digit numbers** — Two-digit per-season ranges (e.g. `(01-52)`) are intentionally ignored to avoid ambiguity with per-season episode counts; only 3-digit+ numbers (e.g. `(053-062)`, `(001-052)`) are treated as absolute hints.
+- **Phase 2 query uses source episode for absolute-episode donghua** — When `absoluteEpisodeMode` is active (catalog reports S1 but the actual season is higher), the Nyaa search query now appends the source-season episode number (e.g. `10`) rather than the absolute number (e.g. `62`), matching what fansubs actually write in their filenames.
+- **`donghuaNeedsBatches` phase runs regardless of Phase 2 results** — The title-only batch search phase now always executes for donghua, so full-season packs are always considered even when individual episode torrents were already found.
+- **Title-only results for donghua are fully processed** — All results from the title-only search phase (not just ones already flagged as batches) are now classified and absorbed for donghua, catching bare season packs and large full-season archives.
+
+### Fixed
+- **`matchesRequest` no longer accepts non-batch torrents with a null episode** — A non-batch release without a parsed episode number (e.g. a bare "Apotheosis S2" pack before the PTT fix) was being accepted for any episode request when the season matched. It now returns `false`, preventing 170 GB full-season packs from being served for a single-episode request.
+- **PTT now parses bare `S\d` season suffixes** — Titles like "Apotheosis S2" or "Battle Through the Heavens S4" (no episode component) were not being recognised as season-tagged releases. A new handler correctly parses these as `season=N, episode=null, isBatch=true`.
+
+### Internal
+- **`extractAbsoluteRangeHint(title)` exported from `providers/index.js`** — Pure utility function that extracts a `{ start, end }` pair from a 3-digit parenthetical range in a torrent title. Usable independently for testing and future providers.
+- **Regression test suite migrated to Node.js built-in test runner** — `test/main.js` now uses `node:test` + `node:assert/strict` (zero extra dependencies). Added 26 new regression tests covering `extractAbsoluteRangeHint`, `matchesRequest` null-episode guard, PTT bare-season handler, and the full pre-seed + classify simulation for flat-catalog donghua. Run with `npm test`.
+
+---
+
 ## [1.8.7] - 2026-05-13 — Smarter RealDebrid Cache Handling
 
 ### Fixed
