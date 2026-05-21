@@ -4,6 +4,36 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
+## [1.9.1] - 2026-05-19 — AniRena Integration and more Debrid Support
+
+**What's New**
+
+Two new debrid services are now supported: **Debrid-Link** and **Premiumize**. You can now add your API key for either service on the configure page, and the addon will automatically use whichever one is configured (or prefer Real-Debrid/TorBox/AllDebrid if you have multiple services active).
+
+### Added
+- **AniRena provider integration** — Implemented server-side token exchange and POST-based search so the provider acquires, caches, and renews bearer tokens (handles x-new-token) to keep searches authenticated and reliable.
+- **Added AniRena API tests** — Added tests validating AniRena token acquisition, the POST search flow returns magnet links, and the token renewal behavior (covers token endpoint and search request/response cycle).
+- **Debrid-Link integration** — Full support for Debrid-Link's seedbox service with automatic torrent management, file selection, and smart caching of download links.
+- **Premiumize integration** — Full support for Premiumize with both instant downloads (directdl) and queued transfers, automatically choosing the fastest method.
+
+### Fixed
+- **Debrid-Link now correctly handles single-file torrents** — Previously would fail to find files because it was looking in the wrong place. Now correctly selects the video file.
+- **Debrid-Link uses the correct API endpoints** — Fixed parameter names and request formats to match Debrid-Link's v2 API exactly.
+- **Better error messages** — When a service is unavailable or has a problem, you'll now see a more specific error message (rate limit, auth failure, service down, etc.) instead of a generic failure.
+
+### Internal
+- Both services now properly detect when servers are overloaded, quotas are exceeded, or authentication has failed, and respond accordingly.
+- Enhanced logging for debugging API issues.
+- Removed dependency on Debrid-Link's disabled `/seedbox/cached` endpoint by using the torrent list instead.
+
+### Changed
+
+- **Resolution filter semantics** — The resolution controls in Optional Settings now act as an *exclusion* list: checked resolutions will be hidden from results. The `resolutions=` URL parameter now contains the list of *excluded* resolutions and is only included when non-empty. If you use a previously saved configuration URL, please open the configure page and re-save your settings so they are updated to the new format.
+
+- **Removed language-detection UI & filtering** — The optional "Title Languages" setting and `franc`-based automatic language detection have been removed. The addon now considers all title variants when searching (no language-based filtering), improving recall on Nyaa results.
+
+---
+
 ## [1.9.0] - 2026-05-18 — Flat-Catalog Donghua Matching & Test Suite
 
 ### Improved
