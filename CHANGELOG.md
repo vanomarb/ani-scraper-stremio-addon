@@ -6,10 +6,6 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ## [1.9.1] - 2026-05-19 — AniRena Integration and more Debrid Support
 
-**What's New**
-
-Two new debrid services are now supported: **Debrid-Link** and **Premiumize**. You can now add your API key for either service on the configure page, and the addon will automatically use whichever one is configured (or prefer Real-Debrid/TorBox/AllDebrid if you have multiple services active).
-
 ### Added
 - **AniRena provider integration** — Implemented server-side token exchange and POST-based search so the provider acquires, caches, and renews bearer tokens (handles x-new-token) to keep searches authenticated and reliable.
 - **Added AniRena API tests** — Added tests validating AniRena token acquisition, the POST search flow returns magnet links, and the token renewal behavior (covers token endpoint and search request/response cycle).
