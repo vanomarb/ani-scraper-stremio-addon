@@ -4,6 +4,23 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
+## [1.9.2] - 2026-05-24 — Late-Season Donghua Batch Fix
+
+### Fixed
+- **Donghua batch torrents with absolute episode numbering now stream correctly** — Shows like Swallowed Star that reach high episode counts (e.g. S5E1 = absolute episode 209) were being rejected when the matching torrent was a batch pack like `[205-209]`. The addon now correctly recognises that episode 209 falls inside that range and serves the right file.
+- **Fewer wasted searches for absolute-numbered Donghua** — The extra search pass that was added as a workaround has been replaced by a cleaner approach: the absolute episode query is now tried as part of the existing progressive search, so it benefits from the same early-exit and caching logic as all other query levels.
+
+
+---
+
+## [1.9.3] - 2026-05-24 — Late-Season Donghua Batch Fix
+
+### Fixed
+- **Donghua batch torrents with absolute episode numbering now stream correctly** — Shows like Swallowed Star that reach high episode counts (e.g. S5E1 = absolute episode 209) were being rejected when the matching torrent was a batch pack like `[205-209]`. The addon now correctly recognises that episode 209 falls inside that range and serves the right file.
+- **Fewer wasted searches for absolute-numbered Donghua** — The extra search pass that was added as a workaround has been replaced by a cleaner approach: the absolute episode query is now tried as part of the existing progressive search, so it benefits from the same early-exit and caching logic as all other query levels.
+
+---
+
 ## [1.9.1] - 2026-05-19 — AniRena Integration and more Debrid Support
 
 ### Added
