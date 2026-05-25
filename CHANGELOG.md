@@ -4,24 +4,21 @@ All notable changes to the Nyaa Stremio Addon are documented here.
 
 ---
 
-## [1.9.2] - 2026-05-24 — Late-Season Donghua Batch Fix
+## [1.9.3] - 2026-05-25 — Stream & Cache Bug Fixes
 
 ### Fixed
-- **Donghua batch torrents with absolute episode numbering now stream correctly** — Shows like Swallowed Star that reach high episode counts (e.g. S5E1 = absolute episode 209) were being rejected when the matching torrent was a batch pack like `[205-209]`. The addon now correctly recognises that episode 209 falls inside that range and serves the right file.
-- **Fewer wasted searches for absolute-numbered Donghua** — The extra search pass that was added as a workaround has been replaced by a cleaner approach: the absolute episode query is now tried as part of the existing progressive search, so it benefits from the same early-exit and caching logic as all other query levels.
+- **Season packs playing the wrong episode** — When streaming from a batch torrent (e.g. a full-season pack), the addon could serve the wrong video file — for example, clicking Episode 15 would play Episode 1. This is now resolved; the correct file is always selected.
+- **Cached stream URL pointing to wrong episode** — After watching one episode, the cached download link could bleed into other episodes from the same pack. Each episode now stores its own link independently.
+- **Resolve errors crashing some streams** — A crash (`isBatch is not defined`) could occur when the addon tried to cache a freshly resolved stream. This affected all debrid services and is now fixed.
+- **Real-Debrid "hoster unavailable" not retrying** — When Real-Debrid returned a temporary hoster error (code 19), the addon was not retrying as intended. It will now correctly retry with a fresh link.
 
+### Internal
+- Resolved URL cache redesigned: each cached URL now lives directly on its torrent entry rather than in a separate root-level map, making cache scoping clearer and preventing cross-episode contamination.
+- Two database migrations run automatically on startup to clean up old cache data and ensure a fresh start under the new schema.
 
 ---
 
-## [1.9.3] - 2026-05-24 — Late-Season Donghua Batch Fix
-
-### Fixed
-- **Donghua batch torrents with absolute episode numbering now stream correctly** — Shows like Swallowed Star that reach high episode counts (e.g. S5E1 = absolute episode 209) were being rejected when the matching torrent was a batch pack like `[205-209]`. The addon now correctly recognises that episode 209 falls inside that range and serves the right file.
-- **Fewer wasted searches for absolute-numbered Donghua** — The extra search pass that was added as a workaround has been replaced by a cleaner approach: the absolute episode query is now tried as part of the existing progressive search, so it benefits from the same early-exit and caching logic as all other query levels.
-
----
-
-## [1.9.1] - 2026-05-19 — AniRena Integration and more Debrid Support
+## [1.9.2] - 2026-05-24 — Late-Season Donghua Batch Fix - 2026-05-19 — AniRena Integration and more Debrid Support
 
 ### Added
 - **AniRena provider integration** — Implemented server-side token exchange and POST-based search so the provider acquires, caches, and renews bearer tokens (handles x-new-token) to keep searches authenticated and reliable.
