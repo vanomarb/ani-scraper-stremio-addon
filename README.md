@@ -1,7 +1,7 @@
 <p align="center">
     <picture>
-          <source srcset="https://nyaa.si/static/img/avatar/default.png">
-          <img alt="Nyaa Logo" src="https://nyaa.si/static/img/avatar/default.png" width=128 height=128>
+          <source srcset="https://raw.githubusercontent.com/vanomarb/ani-scraper-stremio-addon/refs/heads/main/assets/aniscraper-logo.png">
+          <img alt="Nyaa Logo" src="https://raw.githubusercontent.com/vanomarb/ani-scraper-stremio-addon/refs/heads/main/assets/aniscraper-logo.png" width=158 height=158>
     </picture>
 </p>
 
