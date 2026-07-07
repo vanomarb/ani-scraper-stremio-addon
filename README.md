@@ -5,23 +5,18 @@
     </picture>
 </p>
 
-<h1 align="center">Unofficial Nyaa Scraper Addon</h1>
+<h1 align="center">AniScraper Stremio Addon</h1>
 
 ## 🔗 Install / Version
 Install the addon directly in Stremio using the instance below:
 
 ### Public Version
 **Addon URL:**
-[https://nyaa-scraper-stremio-addon.nmtl.app/configure](https://nyaa-scraper-stremio-addon.nmtl.app/configure)
+[https://aniscraper.nmtl.app/configure](https://aniscraper.nmtl.app/configure)
 
-### Nightly Version
-**Addon URL:**
-[https://nyaa-scraper-nightly.nmtl.app/configure](https://nyaa-scraper-nightly.nmtl.app/configure)
+# 🎌 Introduction of Anime Scraper Stremio Addon
 
-
-# 🎌 Introduction of Nyaa Anime Scraper Stremio Addon
-
-Hi everyone! I built an anime streaming addon for Stremio that connects to Nyaa.si and AnimeTosho, with Real-Debrid support.
+Hi everyone! I built an anime streaming addon for Stremio that connects to Nyaa.si, AnimeTosho, AniRena and Tsukihime, with Debrid support.
 
 I had a hard time finding a good addon for anime metadata—especially for donghua—so I ended up making my own. Sharing it here in case it helps anyone dealing with the same problem.
 
@@ -61,7 +56,7 @@ An optional P2P mode lets you watch without Real-Debrid. Magnet links are enrich
 ✅ Nyaa.si + AnimeTosho support  
 ✅ Dynamic title matching (cross-referenced metadata, adaptive variants)  
 ✅ Improved accuracy with TVDB/TMDB integration  
-✅ Real-Debrid instant playback  
+✅ Debrid instant playback  
 ✅ P2P direct streaming (no RD required)  
 ✅ Resolution filtering (4K, 1440p, 1080p, 720p, 480p)  
 ✅ Smart episode matching (JP/CN/KR naming support)  
