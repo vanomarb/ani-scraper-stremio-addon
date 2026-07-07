@@ -1,6 +1,24 @@
 # Changelog
 
-All notable changes to the Nyaa Stremio Addon are documented here.
+All notable changes to the AniScraper (formerly Nyaa Stremio Addon) are documented here.
+
+---
+
+## [2.0.0] - 2026-07-07 — AniScraper Rebrand, TsukiHime Provider, Nyaa.si Paused
+
+### Added
+- **TsukiHime provider integration** — New torrent source (api.tsukihime.org), searchable independently of AnimeTosho and AniRena, with its own rate-limited request worker (2 concurrent requests) that strictly follows the rate-limit headers returned by the TsukiHime API.
+- **Two-call search flow for TsukiHime** — Every title variant (English, Romaji, aliases) plus the target episode number are combined into a single unquoted OR query, finding the specific episode in one call instead of a multi-phase waterfall. If that finds nothing, a broader title-only OR query (classified locally from up to 50 candidates) runs as a fallback for obscure titles or unusual episode numbering.
+
+### Changed
+- **Renamed to AniScraper** — What started as a Nyaa.si-only scraper has grown, by user feature request, into a multi-source anime torrent aggregator (AnimeTosho, AniRena, and now TsukiHime). The addon is now **AniScraper** (formerly Nyaa Anime), with a new Stremio addon ID (`community.aniscraper.anime.addon`) and package name (`ani-scraper-stremio-addon`). Existing users should update/reinstall through the AniScraper configure page.
+- **Nyaa.si temporarily disabled** — Nyaa.si has been paused as a selectable torrent source while we work through some issues on that provider. Existing saved configurations using Nyaa.si no longer scrape or reroute; update to AniScraper and pick AnimeTosho, AniRena, or TsukiHime from `/configure`. This is expected to be temporary.
+- **AnimeTosho domain updated** — `animetosho.org` has been deprecated and its registration has resigned; the addon now talks to `animetosho.xyz` instead.
+
+### Internal
+- Every torrent provider now strictly enforces the rate limits its own API reports via response headers (remaining-quota and reset/retry-after), independent of the other providers' limiters — no provider's worker queue can ever throttle or be throttled by another provider's traffic.
+- **AniRena rate limiting is now scoped per API key** — Previously all users shared one process-wide limiter, incorrectly pooling independent users' independent 60-req/60s quotas together. Each API key now gets its own lazily-created limiter with idle eviction.
+- **MongoDB database renamed** — `nyaa-scraper-cached-requests` → `aniscraper-db`. Run `npm run migrate-db` before deploying to carry over existing caches; `MONGODB_DB_NAME` can point back at the old name to roll back without a code change.
 
 ---
 
