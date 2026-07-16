@@ -4,6 +4,27 @@ All notable changes to the AniScraper (formerly Nyaa Stremio Addon) are document
 
 ---
 
+## [2.1.0] - 2026-07-16 — Accurate Arc, Season & Batch Matching
+
+### Fixed
+- **Wrong arcs and spin-offs no longer show up** — Searching a series (e.g. "Sword Art Online") no longer returns unrelated arcs, sequels, or spin-offs (Alicization, Gun Gale Online, Progressive, Ordinal Scale). A title now matches only itself and the alternate names your metadata knows about, so results stay on the show you actually asked for.
+- **Season & complete packs now play the right episode** — Full-season and complete packs that don't spell out an episode range in their title (e.g. "Sword Art Online S1 [Complete]", "Kimetsu no Yaiba (batch)") were being dropped entirely. They're now matched and expanded to the requested episode.
+- **TsukiHime batches no longer vanish** — TsukiHime doesn't report seeder counts, and those torrents were being incorrectly removed by the seeder-threshold filter. They're now kept (seed count simply shows as unknown).
+- **Second-season titles detected correctly** — Releases that mark the season with a Roman numeral (e.g. "Sword Art Online II", "Mob Psycho 100 II") are now recognized as Season 2 instead of defaulting to Season 1.
+
+### Improved
+- **TsukiHime search accuracy** — TsukiHime now uses the same prioritized, most-specific-first search as the other providers (exact episode first, broadening only if nothing is found), pulling up to 100 candidates per query and filtering them locally the same way, so it benefits from the same matching accuracy and caching.
+
+### Changed
+- **"Max Batch Expansions" setting removed** — How many batch/season packs get expanded is now governed by your **Max Streams** setting instead of a separate cap (previously fixed at 3). You'll now get up to your chosen stream count from batch packs rather than an arbitrary limit.
+
+### Internal
+- All torrent-title parsing was consolidated into the `parse-torrent-title` fork (v1.4.0) — arc/subtitle separation, Roman-numeral seasons, batch/range detection (including bare and 4-digit ranges), absolute-episode range hints, and resolution/codec normalization. The scraper itself no longer carries any title-parsing regex.
+- Provider layer restructured: a provider **registry** (adding a source is one file + one line), a pluggable **search-phase engine**, a dedicated **matching** module (arc gate + classification), a shared **weak-batch** registry, and a single home for remote `.torrent` file-list fetching.
+- TsukiHime is no longer a hard-coded special case — it flows through the generic engine via a declared `advancedQuery` capability.
+
+---
+
 ## [2.0.0] - 2026-07-07 — AniScraper Rebrand, TsukiHime Provider, Nyaa.si Paused
 
 ### Added
