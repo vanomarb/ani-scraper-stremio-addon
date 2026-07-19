@@ -4,6 +4,21 @@ All notable changes to the AniScraper (formerly Nyaa Stremio Addon) are document
 
 ---
 
+## [2.2.0] - 2026-07-19 — Correct Episode From Batches, Better Donghua Raw Coverage
+
+### Fixed
+- **Batch packs no longer serve the wrong episode** — When a batch/season pack's file list couldn't be read (a remote `.torrent` fetch failing or timing out), the addon fell back to guessing a file position from the season-relative episode number. For absolute-numbered or multi-season packs this could serve a completely unrelated episode. The addon now only serves that positional guess when it can actually be bounded by the pack's episode range; otherwise it skips the pack instead of returning the wrong video.
+- **`.torrent` file-list fetch reliability** — The underlying downloader used to read a batch's file list could fail to parse valid `.torrent` files pulled from public caches (a spurious "Missing delimiter" error), even when a normal download of the same file worked fine. Fetching now fetches the raw bytes directly and decodes them, recovering file lists that previously always fell through to a guess.
+- **Episode ranges with spaced dashes now detected** — Titles like `"Episodes 77 - 124"` (as opposed to `"Episodes 77-124"`) weren't recognized as a range, so packs that didn't actually contain the requested episode weren't being rejected.
+- **Donghua raws indexed only under their native title are now found** — Search now also queries the show's native (Chinese/Japanese-script) title, not just the English/romaji variants, surfacing fansub packs — including GM-Team-style raws — that were previously invisible.
+- **Absolute-episode mapping no longer guesses across a data gap** — If a metadata source was missing episode counts for one of the seasons before the requested one, the addon used to sum what it had anyway and silently compute a wrong absolute episode, which made every raw for that request fail to match. It now requires complete season-by-season coverage before computing an absolute episode, and falls back safely otherwise.
+- **Provider fallback for empty results** — If the configured source returns nothing for a specific episode, the addon now also tries TsukiHime (a public, keyless index with strong donghua coverage) before giving up.
+
+### Internal
+- **Test suite consolidated and made runnable** — `npm test` previously only ran one of nine test files; the rest were either disconnected from the test runner or console-log scripts with no assertions. Tests are now organized as `test/unit` (offline, always run) and `test/integration` (real API/DB workflows that skip cleanly when a key, network, or database isn't available, instead of failing or hanging). Added `npm run test:unit` / `npm run test:integration` to run either independently.
+
+---
+
 ## [2.1.0] - 2026-07-16 — Accurate Arc, Season & Batch Matching
 
 ### Fixed
