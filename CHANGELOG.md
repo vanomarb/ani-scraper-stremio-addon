@@ -4,6 +4,21 @@ All notable changes to the AniScraper (formerly Nyaa Stremio Addon) are document
 
 ---
 
+## [2.3.0] - 2026-07-21 — Correct Qualities, Verified-Before-Cache Batches, Truncated .torrent Recovery
+
+### Fixed
+- **Missing 4K / second-tag qualities on recent episodes** — Releases that glue a quality tag right after the group with no separator (e.g. `[BonoboSubs][4k]Renegade Immortal - 仙逆 Xian Ni - 150`) had their episode number lost entirely, so that quality was silently dropped — most visibly the 4K versions of a show's newest episodes. The parser now relocates the extra leading bracket, so the title, episode, and resolution all parse and every quality is returned.
+- **Wrong-episode season/complete packs no longer cached or served** — Open-ended packs with no episode range in the title (e.g. `"… S01 Complete"`, `"[Batch]"`) were kept optimistically and the episode was only checked at play time. They are now verified against the pack's actual file list **before** anything is cached: a pack is kept only if it truly contains the requested episode, and an unconfirmable pack is dropped rather than guessed. This stops flat-catalogued donghua (e.g. Renegade Immortal S1E150, where fansub "S01" packs are only the first cour) from surfacing a pack that can't contain the episode.
+- **Large `.torrent` file lists recovered from truncation** — Public `.torrent` caches cut large torrents off partway through their `pieces` field, which made a strict decode fail (`Missing delimiter`) and the whole pack fall through to a guess. Because the file list sorts before `pieces`, a truncation-tolerant decoder now recovers it, so big batch packs get verified instead of skipped.
+- **Volume/edition batches no longer mistaken for a different arc** — The arc filter treated packaging words like `"(Books 1-5)"` and Initial D's `"Stages 1-6"` as if they named a different arc, dropping legitimate batches of the requested series. Structural words (book/volume/part/season/cour/complete/batch/stage) are now ignored by the arc check, while genuine arc/sequel names (Alicization, Progressive, "Fifth Stage") are still rejected.
+
+### Internal
+- **Episode-correctness guard rail moved ahead of the cache** — the keep/drop pipeline now confirms batch episodes (`filterConfirmedBatches`) before `storeEpisodeCache`, so only correct-episode torrents are persisted; the verified file list is reused at stream-build to avoid a second fetch, and the batch resolver never positional-guesses an open-ended pack.
+- **`parse-torrent-title` fork bumped to v1.4.2** — glued leading-bracket normalization; the scraper still carries no title-parsing regex.
+- **New maintenance script `scripts/clean-episode-cache.js`** — retroactively purges wrong-episode open-ended packs cached before the guard rail existed. Verifies each pack against its real file list (metadata-independent), removes only what it can prove wrong, keeps everything unverifiable, and is dry-run by default.
+
+---
+
 ## [2.2.0] - 2026-07-19 — Correct Episode From Batches, Better Donghua Raw Coverage
 
 ### Fixed
